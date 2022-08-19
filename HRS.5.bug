@@ -1,0 +1,20 @@
+model{
+  for (i in 1:length(Wellbeing)){
+    mu[i] <- alpha[HHID[i]] + beta[1]*age[i] + beta[2]*edu[i] + beta[3]*BMI[i] + beta[4]*gait[i] + beta[5]*grip[i] 
+    Wellbeing[i] ~ dordered.logit(mu[i], c[1:4])
+  }
+     
+  for (j in 1:4){
+    c0[j] ~ dnorm(0, 0.01)
+  }
+    c[1:4] <- sort(c0)
+
+  for (h in 1:ngroups){
+    alpha[h] ~ dnorm(0, 1/sigmaalpha^2)
+  }
+    sigmaalpha ~ dexp(0.001)
+   
+    beta ~ dmnorm(beta0, sigmabetainv)
+    
+    sigmasqalpha <- sigmaalpha^2
+}
